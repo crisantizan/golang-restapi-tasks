@@ -1,33 +1,24 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
+	"github.com/crisantizan/golang-restapi-tasks/helper"
+	"github.com/crisantizan/golang-restapi-tasks/structs"
 )
 
-// Task a simple task
-type Task struct {
-	ID int `json:"id,omitempty"`
-	CreateTask
-}
-
-// CreateTask required data to create a new task
-type CreateTask struct {
-	Body      string `json:"body,omitempty"`
-	Completed bool   `json:"completed,omitempty"`
-}
-
 func main() {
-	f, err := ioutil.ReadFile("./data.json")
+	helper.AddTaskInFile(structs.CreateTask{
+		Body:      "Body",
+		Completed: true,
+	})
+	// f, err := ioutil.ReadFile("./data.json")
 
-	if err != nil {
-		fmt.Println(err)
-	}
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
 
-	var tasks []Task
+	// var tasks []Task
 
-	json.Unmarshal(f, &tasks)
+	// json.Unmarshal(f, &tasks)
 
-	fmt.Println(tasks)
+	// fmt.Println(tasks)
 }
