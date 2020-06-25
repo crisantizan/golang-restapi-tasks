@@ -9,5 +9,5 @@ type Task struct {
 // CreateTask required data to create a new task
 type CreateTask struct {
 	Body      string `json:"body,omitempty"`
-	Completed bool   `json:"completed,omitempty"`
+	Completed *bool  `json:"completed,omitempty"`
 }

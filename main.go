@@ -9,7 +9,8 @@ import (
 
 func main() {
 	r := mux.NewRouter()
-	r.HandleFunc("/tasks", handler.GetTasks)
+	r.HandleFunc("/tasks", handler.GetTasks).Methods(http.MethodGet)
+	r.HandleFunc("/tasks", handler.CreateTask).Methods(http.MethodPost)
 
 	http.ListenAndServe(":3000", r)
 }

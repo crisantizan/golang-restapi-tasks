@@ -1,7 +1,1 @@
-[
-  {
-    "id": 1,
-    "body": "Default task",
-    "completed": true
-  }
-]
+[{"id":1,"body":"Default task","completed":true},{"id":3,"body":"Body from Postman","completed":true},{"id":4,"body":"Body from Postman","completed":false},{"id":5,"body":"Body from Postman","completed":false},{"id":6,"body":"New content","completed":true},{"id":8,"body":"New content","completed":true},{"id":9,"body":"New content","completed":true}]

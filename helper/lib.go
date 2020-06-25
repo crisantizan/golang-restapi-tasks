@@ -24,23 +24,26 @@ func ReadFile() (tasks []structs.Task) {
 }
 
 // AddTaskInFile add new task to json file
-func AddTaskInFile(task structs.CreateTask, tasks []structs.Task) bool {
+func AddTaskInFile(task structs.CreateTask, tasks *[]structs.Task) structs.Task {
+	// get the last id
+	lastID := (*tasks)[len(*tasks)-1].ID
+
 	newTask := structs.Task{
-		ID:         len(tasks) + 1,
+		ID:         lastID + 1,
 		CreateTask: task,
 	}
 
-	data := append(tasks, newTask)
+	// assign the new task
+	*tasks = append(*tasks, newTask)
 
-	jsonBytes, err := json.Marshal(data)
+	// convert data to bytes
+	jsonBytes, err := json.Marshal(tasks)
 	if err != nil {
 		fmt.Println(err)
 	}
 
+	// write in json file
 	ioutil.WriteFile("data.json", jsonBytes, 0644)
-	if err != nil {
-		fmt.Println(err)
-	}
 
-	return true
+	return newTask
 }
