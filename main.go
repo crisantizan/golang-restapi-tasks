@@ -6,10 +6,13 @@ import (
 )
 
 func main() {
+	tasks := helper.ReadFile()
+
+	// fmt.Println(tasks)
 	helper.AddTaskInFile(structs.CreateTask{
 		Body:      "Body",
 		Completed: true,
-	})
+	}, tasks)
 	// f, err := ioutil.ReadFile("./data.json")
 
 	// if err != nil {
