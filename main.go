@@ -1,27 +1,15 @@
 package main
 
 import (
-	"github.com/crisantizan/golang-restapi-tasks/helper"
-	"github.com/crisantizan/golang-restapi-tasks/structs"
+	"net/http"
+
+	"github.com/crisantizan/golang-restapi-tasks/handler"
+	"github.com/gorilla/mux"
 )
 
 func main() {
-	tasks := helper.ReadFile()
+	r := mux.NewRouter()
+	r.HandleFunc("/tasks", handler.GetTasks)
 
-	// fmt.Println(tasks)
-	helper.AddTaskInFile(structs.CreateTask{
-		Body:      "Body",
-		Completed: true,
-	}, tasks)
-	// f, err := ioutil.ReadFile("./data.json")
-
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-
-	// var tasks []Task
-
-	// json.Unmarshal(f, &tasks)
-
-	// fmt.Println(tasks)
+	http.ListenAndServe(":3000", r)
 }
