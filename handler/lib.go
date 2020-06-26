@@ -32,6 +32,15 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 	// transform to struct
 	json.Unmarshal(d, &newTask)
 
+	// validate struct
+	if err := newTask.Validate(); err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(err)
+
+		return
+	}
+
 	// save in file and return full task (with id)
 	fullNewTask := helper.AddTaskInFile(newTask, &tasks)
 
