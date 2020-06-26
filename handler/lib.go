@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/crisantizan/golang-restapi-tasks/helper"
 	"github.com/crisantizan/golang-restapi-tasks/structs"
@@ -12,11 +13,22 @@ import (
 
 var tasks = helper.ReadFile()
 
+// custom http response (in JSON)
+func httpR(w http.ResponseWriter, r *http.Request, status int, err interface{}) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+
+	json.NewEncoder(w).Encode(structs.Error{
+		Method:    r.Method,
+		Status:    status,
+		Timestamp: time.Now().UTC(),
+		Response:  err,
+	})
+}
+
 // GetTasks get all tasks
 func GetTasks(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(200)
-	json.NewEncoder(w).Encode(tasks)
+	httpR(w, r, http.StatusOK, tasks)
 }
 
 // CreateTask create a new task
@@ -34,19 +46,12 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 
 	// validate struct
 	if err := newTask.Validate(); err != nil {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(err)
-
+		httpR(w, r, http.StatusBadRequest, err)
 		return
 	}
 
 	// save in file and return full task (with id)
 	fullNewTask := helper.AddTaskInFile(newTask, &tasks)
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-
-	// sent as bytes
-	json.NewEncoder(w).Encode(fullNewTask)
+	httpR(w, r, http.StatusCreated, fullNewTask)
 }

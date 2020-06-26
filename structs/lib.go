@@ -1,6 +1,8 @@
 package structs
 
 import (
+	"time"
+
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
@@ -14,6 +16,14 @@ type Task struct {
 type CreateTask struct {
 	Body      string `json:"body"`
 	Completed bool   `json:"completed"`
+}
+
+// Error is a custom HTTP error
+type Error struct {
+	Method    string      `json:"method,omitempty"`
+	Status    int         `json:"status,omitempty"`
+	Timestamp time.Time   `json:"timestamp,omitempty"`
+	Response  interface{} `json:"response,omitempty"`
 }
 
 // Validate struct properties
