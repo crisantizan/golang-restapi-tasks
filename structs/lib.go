@@ -8,6 +8,6 @@ type Task struct {
 
 // CreateTask required data to create a new task
 type CreateTask struct {
-	Body      string `json:"body,omitempty"`
-	Completed *bool  `json:"completed,omitempty"`
+	Body      string `json:"body,omitempty" validate:"nonzero"`
+	Completed *bool  `json:"completed,omitempty" validate:"regexp=^true|false$"`
 }

@@ -27,10 +27,11 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	// save here the previus value
+	// save here the previous value
 	var newTask structs.CreateTask
 	// transform to struct
 	json.Unmarshal(d, &newTask)
+
 	// save in file and return full task (with id)
 	fullNewTask := helper.AddTaskInFile(newTask, &tasks)
 
