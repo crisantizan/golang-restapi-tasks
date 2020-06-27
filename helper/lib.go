@@ -47,3 +47,27 @@ func AddTaskInFile(task structs.CreateTask, tasks *[]structs.Task) structs.Task 
 
 	return newTask
 }
+
+// BinarySearch in a array
+func BinarySearch(arr []structs.Task, id int, min int, max int) int {
+	if max >= min {
+		// search slice middle
+		middle := (min + max) / 2
+		// item
+		guess := arr[middle]
+
+		// found
+		if guess.ID == id {
+			return middle
+		}
+
+		// continue with other values
+		if guess.ID > id {
+			return BinarySearch(arr, id, min, middle-1)
+		}
+
+		return BinarySearch(arr, id, middle+1, max)
+	}
+
+	return -1
+}

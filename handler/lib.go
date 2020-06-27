@@ -5,16 +5,20 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/crisantizan/golang-restapi-tasks/helper"
 	"github.com/crisantizan/golang-restapi-tasks/structs"
+	"github.com/gorilla/mux"
 )
 
-var tasks = helper.ReadFile()
+var Tasks = structs.Tasks{
+	Data: helper.ReadFile(),
+}
 
 // custom http response (in JSON)
-func httpR(w http.ResponseWriter, r *http.Request, status int, err interface{}) {
+func httpR(w http.ResponseWriter, r *http.Request, status int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 
@@ -22,13 +26,28 @@ func httpR(w http.ResponseWriter, r *http.Request, status int, err interface{}) 
 		Method:    r.Method,
 		Status:    status,
 		Timestamp: time.Now().UTC(),
-		Response:  err,
+		Response:  data,
 	})
 }
 
 // GetTasks get all tasks
 func GetTasks(w http.ResponseWriter, r *http.Request) {
-	httpR(w, r, http.StatusOK, tasks)
+	httpR(w, r, http.StatusOK, Tasks.Data)
+}
+
+// GetTask get one task
+func GetTask(w http.ResponseWriter, r *http.Request) {
+	// get param id and convert to int (is string per default)
+	id, _ := strconv.Atoi(mux.Vars(r)["id"])
+	// search, -1 if not found
+	index := Tasks.BinarySearch(id, 0, len(Tasks.Data)-1)
+
+	if index == -1 {
+		httpR(w, r, http.StatusNotFound, "Task not found")
+		return
+	}
+
+	httpR(w, r, http.StatusOK, Tasks.Data[index])
 }
 
 // CreateTask create a new task
@@ -51,7 +70,7 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// save in file and return full task (with id)
-	fullNewTask := helper.AddTaskInFile(newTask, &tasks)
+	fullNewTask := helper.AddTaskInFile(newTask, &Tasks.Data)
 
 	httpR(w, r, http.StatusCreated, fullNewTask)
 }

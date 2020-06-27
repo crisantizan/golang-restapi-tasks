@@ -12,6 +12,11 @@ type Task struct {
 	CreateTask
 }
 
+// Tasks manage
+type Tasks struct {
+	Data []Task
+}
+
 // CreateTask required data to create a new task
 type CreateTask struct {
 	Body      string `json:"body"`
@@ -31,4 +36,28 @@ func (t CreateTask) Validate() error {
 	return validation.ValidateStruct(&t,
 		validation.Field(&t.Body, validation.Required),
 	)
+}
+
+// BinarySearch in a array
+func (t Tasks) BinarySearch(id int, min int, max int) int {
+	if max >= min {
+		// search slice middle
+		middle := (min + max) / 2
+		// item
+		guess := t.Data[middle]
+
+		// found
+		if guess.ID == id {
+			return middle
+		}
+
+		// continue with other values
+		if guess.ID > id {
+			return t.BinarySearch(id, min, middle-1)
+		}
+
+		return t.BinarySearch(id, middle+1, max)
+	}
+
+	return -1
 }
