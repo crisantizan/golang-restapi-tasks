@@ -49,12 +49,12 @@ func AddTaskInFile(task structs.CreateTask, tasks *[]structs.Task) structs.Task 
 }
 
 // BinarySearch in a array
-func BinarySearch(arr []structs.Task, id int, min int, max int) int {
+func BinarySearch(arr []interface{}, id int, min int, max int) int {
 	if max >= min {
 		// search slice middle
 		middle := (min + max) / 2
 		// item
-		guess := arr[middle]
+		guess := arr[middle].(struct{ ID int })
 
 		// found
 		if guess.ID == id {
@@ -70,4 +70,26 @@ func BinarySearch(arr []structs.Task, id int, min int, max int) int {
 	}
 
 	return -1
+}
+
+// UpdateTaskInFile and locally
+func UpdateTaskInFile(id int, index int, task structs.CreateTask, tasks *[]structs.Task) structs.Task {
+	newTask := structs.Task{
+		ID:         id,
+		CreateTask: task,
+	}
+
+	// update task
+	(*tasks)[index] = newTask
+
+	// convert data to bytes
+	jsonBytes, err := json.Marshal(tasks)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// write in json file
+	ioutil.WriteFile("data.json", jsonBytes, 0644)
+
+	return newTask
 }

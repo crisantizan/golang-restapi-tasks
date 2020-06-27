@@ -74,3 +74,37 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 
 	httpR(w, r, http.StatusCreated, fullNewTask)
 }
+
+// UpdateTask update a task
+func UpdateTask(w http.ResponseWriter, r *http.Request) {
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		fmt.Println(err)
+		httpR(w, r, http.StatusInternalServerError, "Internal server error")
+		return
+	}
+
+	// read data sent by client
+	var taskData structs.CreateTask
+	json.Unmarshal(body, &taskData)
+
+	// validate properties
+	if err := taskData.Validate(); err != nil {
+		httpR(w, r, http.StatusBadRequest, err)
+		return
+	}
+
+	// get param id and convert to int (is string per default)
+	id, _ := strconv.Atoi(mux.Vars(r)["id"])
+	// search, -1 if not found
+	index := tasks.BinarySearch(id, 0, len(tasks.Data)-1)
+
+	if index == -1 {
+		httpR(w, r, http.StatusNotFound, "Task not found")
+		return
+	}
+
+	taskUpdated := helper.UpdateTaskInFile(id, index, taskData, &tasks.Data)
+
+	httpR(w, r, http.StatusOK, taskUpdated)
+}

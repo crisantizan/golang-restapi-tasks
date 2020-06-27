@@ -17,5 +17,8 @@ func main() {
 	// POST
 	r.HandleFunc("/tasks", handler.CreateTask).Methods(http.MethodPost)
 
+	// PUT
+	r.HandleFunc("/tasks/{id:[0-9]+}", handler.UpdateTask).Methods(http.MethodPut)
+
 	http.ListenAndServe(":3000", r)
 }

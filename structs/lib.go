@@ -61,3 +61,8 @@ func (t Tasks) BinarySearch(id int, min int, max int) int {
 
 	return -1
 }
+
+// GetLastID of tasks
+func (t Tasks) GetLastID() int {
+	return t.Data[len(t.Data)-1].ID
+}
