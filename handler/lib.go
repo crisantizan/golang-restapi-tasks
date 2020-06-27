@@ -13,7 +13,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var Tasks = structs.Tasks{
+var tasks = structs.Tasks{
 	Data: helper.ReadFile(),
 }
 
@@ -32,7 +32,7 @@ func httpR(w http.ResponseWriter, r *http.Request, status int, data interface{})
 
 // GetTasks get all tasks
 func GetTasks(w http.ResponseWriter, r *http.Request) {
-	httpR(w, r, http.StatusOK, Tasks.Data)
+	httpR(w, r, http.StatusOK, tasks.Data)
 }
 
 // GetTask get one task
@@ -40,14 +40,14 @@ func GetTask(w http.ResponseWriter, r *http.Request) {
 	// get param id and convert to int (is string per default)
 	id, _ := strconv.Atoi(mux.Vars(r)["id"])
 	// search, -1 if not found
-	index := Tasks.BinarySearch(id, 0, len(Tasks.Data)-1)
+	index := tasks.BinarySearch(id, 0, len(tasks.Data)-1)
 
 	if index == -1 {
 		httpR(w, r, http.StatusNotFound, "Task not found")
 		return
 	}
 
-	httpR(w, r, http.StatusOK, Tasks.Data[index])
+	httpR(w, r, http.StatusOK, tasks.Data[index])
 }
 
 // CreateTask create a new task
@@ -70,7 +70,7 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// save in file and return full task (with id)
-	fullNewTask := helper.AddTaskInFile(newTask, &Tasks.Data)
+	fullNewTask := helper.AddTaskInFile(newTask, &tasks.Data)
 
 	httpR(w, r, http.StatusCreated, fullNewTask)
 }
