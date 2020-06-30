@@ -7,16 +7,11 @@ import (
 )
 
 func main() {
-	helpers := &Helper{}
 	r := mux.NewRouter()
-	h := &Handler{
-		TaskList: &TaskList{
-			Data: helpers.ReadFile(),
-		},
-	}
+	h := GetHandlers()
 
 	// GET
-	r.HandleFunc("/tasks", h.GetTasks).Methods(http.MethodGet)
+	r.HandleFunc("/tasks", h.GetTasks)
 	r.HandleFunc("/tasks/{id:[0-9]+}", h.GetTask).Methods(http.MethodGet)
 
 	// POST

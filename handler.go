@@ -16,6 +16,15 @@ type Handler struct {
 	TaskList *TaskList
 }
 
+// GetHandlers and tasks data
+func GetHandlers() *Handler {
+	return &Handler{
+		TaskList: &TaskList{
+			data: GetTasksFromJSONFile(),
+		},
+	}
+}
+
 // Error is a custom HTTP error
 type Error struct {
 	Method    string      `json:"method,omitempty"`
@@ -39,7 +48,7 @@ func (Handler) HTTPResponse(w http.ResponseWriter, r *http.Request, status int, 
 
 // GetTasks get all tasks
 func (h *Handler) GetTasks(w http.ResponseWriter, r *http.Request) {
-	h.HTTPResponse(w, r, http.StatusOK, h.TaskList.Data)
+	h.HTTPResponse(w, r, http.StatusOK, h.TaskList.data)
 }
 
 // GetTask only
@@ -94,11 +103,11 @@ func (h *Handler) UpdateTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// read data sent by client
-	var taskData CreateTask
-	json.Unmarshal(body, &taskData)
+	var taskdata CreateTask
+	json.Unmarshal(body, &taskdata)
 
 	// validate properties
-	if err := taskData.Validate(); err != nil {
+	if err := taskdata.Validate(); err != nil {
 		h.HTTPResponse(w, r, http.StatusBadRequest, err)
 		return
 	}
@@ -106,7 +115,7 @@ func (h *Handler) UpdateTask(w http.ResponseWriter, r *http.Request) {
 	// get param id and convert to int (is string per default)
 	id, _ := strconv.Atoi(mux.Vars(r)["id"])
 
-	taskUpdated, err := h.TaskList.UpdateTaskInFile(id, taskData)
+	taskUpdated, err := h.TaskList.UpdateTaskInFile(id, taskdata)
 
 	if err != nil {
 		h.HTTPResponse(w, r, http.StatusNotFound, err.Error())

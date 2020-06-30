@@ -30,18 +30,35 @@ type Task struct {
 
 // TaskList properties
 type TaskList struct {
-	Data []*Task
+	data []*Task
+}
+
+// GetTasksFromJSONFile reading file in disk
+func GetTasksFromJSONFile() []*Task {
+	filename := "data.json"
+
+	f, err := ioutil.ReadFile(filename)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	var tasks []*Task
+
+	json.Unmarshal(f, &tasks)
+
+	return tasks
 }
 
 // GetOne task
 func (t *TaskList) GetOne(id int) (Task, error) {
-	index := t.BinarySearch(id, 0, len(t.Data)-1)
+	index := t.BinarySearch(id, 0, len(t.data)-1)
 
 	if index == -1 {
 		return Task{}, errors.New("Task not found")
 	}
 
-	return *t.Data[index], nil
+	return *t.data[index], nil
 }
 
 // BinarySearch in tasks
@@ -50,7 +67,7 @@ func (t *TaskList) BinarySearch(id int, min int, max int) int {
 		// search slice middle
 		middle := (min + max) / 2
 		// item
-		guess := t.Data[middle]
+		guess := t.data[middle]
 
 		// found
 		if guess.ID == id {
@@ -70,7 +87,7 @@ func (t *TaskList) BinarySearch(id int, min int, max int) int {
 
 // GetLastID of tasks
 func (t *TaskList) GetLastID() int {
-	return t.Data[len(t.Data)-1].ID
+	return t.data[len(t.data)-1].ID
 }
 
 // AddTaskInFile add new task to json file
@@ -84,10 +101,10 @@ func (t *TaskList) AddTaskInFile(task CreateTask) Task {
 	}
 
 	// assign the new task
-	t.Data = append(t.Data, newTask)
+	t.data = append(t.data, newTask)
 
 	// convert data to bytes
-	jsonBytes, err := json.Marshal(t.Data)
+	jsonBytes, err := json.Marshal(t.data)
 
 	if err != nil {
 		fmt.Println(err)
@@ -100,20 +117,20 @@ func (t *TaskList) AddTaskInFile(task CreateTask) Task {
 }
 
 // UpdateTaskInFile and locally
-func (t *TaskList) UpdateTaskInFile(id int, taskData CreateTask) (Task, error) {
+func (t *TaskList) UpdateTaskInFile(id int, taskdata CreateTask) (Task, error) {
 	// find index
-	index := t.BinarySearch(id, 0, len(t.Data)-1)
+	index := t.BinarySearch(id, 0, len(t.data)-1)
 
 	newTask := &Task{
 		ID:         id,
-		CreateTask: taskData,
+		CreateTask: taskdata,
 	}
 
 	// update task
-	t.Data[index] = newTask
+	t.data[index] = newTask
 
 	// convert data to bytes
-	jsonBytes, err := json.Marshal(t.Data)
+	jsonBytes, err := json.Marshal(t.data)
 
 	if err != nil {
 		return Task{}, errors.New("Task not found")
