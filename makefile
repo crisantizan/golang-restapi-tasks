@@ -7,4 +7,4 @@ run:
 	./golang-restapi-tasks/main
 
 dev:
-	go run main.go handler.go tasks.go
+	go run main.go middleware.go handler.go tasks.go

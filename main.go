@@ -23,5 +23,8 @@ func main() {
 	// DELETE
 	r.HandleFunc("/tasks/{id:[0-9]+}", h.DeleteTask).Methods(http.MethodDelete)
 
+	// MIDDLEWARES
+	r.Use(LogginMiddleware)
+
 	http.ListenAndServe(":3000", r)
 }
