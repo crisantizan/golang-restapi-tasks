@@ -1,95 +1,95 @@
-package helper
+// package helper
 
-import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
+// import (
+// 	"encoding/json"
+// 	"fmt"
+// 	"io/ioutil"
 
-	"github.com/crisantizan/golang-restapi-tasks/structs"
-)
+// 	"github.com/crisantizan/golang-restapi-tasks/structs"
+// )
 
-// ReadFile read a json file
-func ReadFile() (tasks []structs.Task) {
-	filename := "data.json"
+// // ReadFile read a json file
+// func ReadFile() (tasks []structs.Task) {
+// 	filename := "data.json"
 
-	f, err := ioutil.ReadFile(filename)
+// 	f, err := ioutil.ReadFile(filename)
 
-	if err != nil {
-		fmt.Println(err)
-	}
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
 
-	json.Unmarshal(f, &tasks)
+// 	json.Unmarshal(f, &tasks)
 
-	return
-}
+// 	return
+// }
 
-// AddTaskInFile add new task to json file
-func AddTaskInFile(task structs.CreateTask, tasks *[]structs.Task) structs.Task {
-	// get the last id
-	lastID := (*tasks)[len(*tasks)-1].ID
+// // AddTaskInFile add new task to json file
+// func AddTaskInFile(task structs.CreateTask, tasks *[]structs.Task) structs.Task {
+// 	// get the last id
+// 	lastID := (*tasks)[len(*tasks)-1].ID
 
-	newTask := structs.Task{
-		ID:         lastID + 1,
-		CreateTask: task,
-	}
+// 	newTask := structs.Task{
+// 		ID:         lastID + 1,
+// 		CreateTask: task,
+// 	}
 
-	// assign the new task
-	*tasks = append(*tasks, newTask)
+// 	// assign the new task
+// 	*tasks = append(*tasks, newTask)
 
-	// convert data to bytes
-	jsonBytes, err := json.Marshal(tasks)
-	if err != nil {
-		fmt.Println(err)
-	}
+// 	// convert data to bytes
+// 	jsonBytes, err := json.Marshal(tasks)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
 
-	// write in json file
-	ioutil.WriteFile("data.json", jsonBytes, 0644)
+// 	// write in json file
+// 	ioutil.WriteFile("data.json", jsonBytes, 0644)
 
-	return newTask
-}
+// 	return newTask
+// }
 
-// BinarySearch in a array
-func BinarySearch(arr []interface{}, id int, min int, max int) int {
-	if max >= min {
-		// search slice middle
-		middle := (min + max) / 2
-		// item
-		guess := arr[middle].(struct{ ID int })
+// // BinarySearch in a array
+// func BinarySearch(arr []interface{}, id int, min int, max int) int {
+// 	if max >= min {
+// 		// search slice middle
+// 		middle := (min + max) / 2
+// 		// item
+// 		guess := arr[middle].(struct{ ID int })
 
-		// found
-		if guess.ID == id {
-			return middle
-		}
+// 		// found
+// 		if guess.ID == id {
+// 			return middle
+// 		}
 
-		// continue with other values
-		if guess.ID > id {
-			return BinarySearch(arr, id, min, middle-1)
-		}
+// 		// continue with other values
+// 		if guess.ID > id {
+// 			return BinarySearch(arr, id, min, middle-1)
+// 		}
 
-		return BinarySearch(arr, id, middle+1, max)
-	}
+// 		return BinarySearch(arr, id, middle+1, max)
+// 	}
 
-	return -1
-}
+// 	return -1
+// }
 
-// UpdateTaskInFile and locally
-func UpdateTaskInFile(id int, index int, task structs.CreateTask, tasks *[]structs.Task) structs.Task {
-	newTask := structs.Task{
-		ID:         id,
-		CreateTask: task,
-	}
+// // UpdateTaskInFile and locally
+// func UpdateTaskInFile(id int, index int, task structs.CreateTask, tasks *[]structs.Task) structs.Task {
+// 	newTask := structs.Task{
+// 		ID:         id,
+// 		CreateTask: task,
+// 	}
 
-	// update task
-	(*tasks)[index] = newTask
+// 	// update task
+// 	(*tasks)[index] = newTask
 
-	// convert data to bytes
-	jsonBytes, err := json.Marshal(tasks)
-	if err != nil {
-		fmt.Println(err)
-	}
+// 	// convert data to bytes
+// 	jsonBytes, err := json.Marshal(tasks)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
 
-	// write in json file
-	ioutil.WriteFile("data.json", jsonBytes, 0644)
+// 	// write in json file
+// 	ioutil.WriteFile("data.json", jsonBytes, 0644)
 
-	return newTask
-}
+// 	return newTask
+// }
