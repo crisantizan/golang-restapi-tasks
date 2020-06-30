@@ -46,12 +46,12 @@ func (Handler) HTTPResponse(w http.ResponseWriter, r *http.Request, status int, 
 	})
 }
 
-// GetTasks get all tasks
+// GetTasks handler
 func (h *Handler) GetTasks(w http.ResponseWriter, r *http.Request) {
 	h.HTTPResponse(w, r, http.StatusOK, h.TaskList.data)
 }
 
-// GetTask only
+// GetTask handler
 func (h *Handler) GetTask(w http.ResponseWriter, r *http.Request) {
 	// get param id and convert to int (is string per default)
 	id, _ := strconv.Atoi(mux.Vars(r)["id"])
@@ -93,7 +93,7 @@ func (h *Handler) CreateTask(w http.ResponseWriter, r *http.Request) {
 	h.HTTPResponse(w, r, http.StatusCreated, fullNewTask)
 }
 
-// UpdateTask update a task
+// UpdateTask handler
 func (h *Handler) UpdateTask(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -123,4 +123,16 @@ func (h *Handler) UpdateTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	h.HTTPResponse(w, r, http.StatusOK, taskUpdated)
+}
+
+// DeleteTask handler
+func (h *Handler) DeleteTask(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(mux.Vars(r)["id"])
+
+	if err := h.TaskList.DeleteTaskInFile(id); err != nil {
+		h.HTTPResponse(w, r, http.StatusNotFound, err.Error())
+		return
+	}
+
+	h.HTTPResponse(w, r, http.StatusOK, true)
 }

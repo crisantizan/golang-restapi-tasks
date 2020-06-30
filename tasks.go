@@ -9,6 +9,8 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation"
 )
 
+const filename string = "data.json"
+
 // CreateTask data
 type CreateTask struct {
 	Body      string `json:"body"`
@@ -121,6 +123,10 @@ func (t *TaskList) UpdateTaskInFile(id int, taskdata CreateTask) (Task, error) {
 	// find index
 	index := t.BinarySearch(id, 0, len(t.data)-1)
 
+	if index == -1 {
+		return Task{}, errors.New("Task not found")
+	}
+
 	newTask := &Task{
 		ID:         id,
 		CreateTask: taskdata,
@@ -133,11 +139,35 @@ func (t *TaskList) UpdateTaskInFile(id int, taskdata CreateTask) (Task, error) {
 	jsonBytes, err := json.Marshal(t.data)
 
 	if err != nil {
-		return Task{}, errors.New("Task not found")
+		return Task{}, errors.New("Internal server error")
 	}
 
 	// write in json file
-	ioutil.WriteFile("data.json", jsonBytes, 0644)
+	ioutil.WriteFile(filename, jsonBytes, 0644)
 
 	return *newTask, nil
+}
+
+// DeleteTaskInFile method
+func (t *TaskList) DeleteTaskInFile(id int) error {
+	index := t.BinarySearch(id, 0, len(t.data)-1)
+
+	if index == -1 {
+		return errors.New("Task not found")
+	}
+
+	// remove from slice
+	t.data = append(t.data[:index], t.data[index+1:]...)
+
+	// convert data to bytes
+	jsonBytes, err := json.Marshal(t.data)
+
+	if err != nil {
+		return errors.New("Internal server error")
+	}
+
+	// remove from file
+	ioutil.WriteFile(filename, jsonBytes, 0644)
+
+	return nil
 }

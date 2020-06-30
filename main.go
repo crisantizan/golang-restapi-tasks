@@ -11,7 +11,7 @@ func main() {
 	h := GetHandlers()
 
 	// GET
-	r.HandleFunc("/tasks", h.GetTasks)
+	r.HandleFunc("/tasks", h.GetTasks).Methods(http.MethodGet)
 	r.HandleFunc("/tasks/{id:[0-9]+}", h.GetTask).Methods(http.MethodGet)
 
 	// POST
@@ -19,6 +19,9 @@ func main() {
 
 	// PUT
 	r.HandleFunc("/tasks/{id:[0-9]+}", h.UpdateTask).Methods(http.MethodPut)
+
+	// DELETE
+	r.HandleFunc("/tasks/{id:[0-9]+}", h.DeleteTask).Methods(http.MethodDelete)
 
 	http.ListenAndServe(":3000", r)
 }
