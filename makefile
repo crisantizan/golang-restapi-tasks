@@ -5,3 +5,6 @@ build:
 
 run:
 	./golang-restapi-tasks/main
+
+dev:
+	go run main.go handler.go tasks.go
