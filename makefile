@@ -1,10 +1,10 @@
-build:
-	mkdir bin
-	cp data.json bin
-	go build -o bin/go-tasks middleware.go handler.go tasks.go server.go main.go
+# build:
+# 	mkdir bin
+# 	cp data.json bin
+# 	go build -o bin/golang-restapi-tasks middleware.go handler.go tasks.go server.go main.go
 
-run:
-	bin/go-tasks
+# run:
+# 	bin/golang-restapi-tasks
 
-dev:
-	go run middleware.go handler.go tasks.go server.go main.go
+# dev:
+# 	go run middleware.go handler.go tasks.go server.go main.go
