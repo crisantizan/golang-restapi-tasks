@@ -1,1 +1,1 @@
-web: bin/go-tasks
+web: ./bin/golang-restapi-tasks
