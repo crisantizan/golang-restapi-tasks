@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	validation "github.com/go-ozzo/ozzo-validation"
+	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
 const filename string = "data.json"
