@@ -1,14 +1,13 @@
 package main
 
 import (
-	"log"
 	"net/http"
-
-	"github.com/gorilla/mux"
 )
 
 func main() {
-	r := mux.NewRouter()
+	// r := mux.NewRouter()
+	server := NewServer("3000")
+	r := server.router
 	h := GetHandlers()
 
 	// GET
@@ -27,5 +26,5 @@ func main() {
 	// MIDDLEWARES
 	r.Use(LogginMiddleware)
 
-	log.Fatal(http.ListenAndServe(":3000", r))
+	server.Listen()
 }
