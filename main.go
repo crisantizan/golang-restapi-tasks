@@ -11,6 +11,7 @@ func main() {
 	h := GetHandlers()
 
 	// GET
+	r.HandleFunc("/", h.Redirect).Methods(http.MethodGet)
 	r.HandleFunc("/tasks", h.GetTasks).Methods(http.MethodGet)
 	r.HandleFunc("/tasks/{id:[0-9]+}", h.GetTask).Methods(http.MethodGet)
 

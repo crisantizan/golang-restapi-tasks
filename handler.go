@@ -46,6 +46,11 @@ func (Handler) HTTPResponse(w http.ResponseWriter, r *http.Request, status int, 
 	})
 }
 
+// Redirect to /tasks
+func (Handler) Redirect(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "/tasks", http.StatusMovedPermanently)
+}
+
 // GetTasks handler
 func (h *Handler) GetTasks(w http.ResponseWriter, r *http.Request) {
 	h.HTTPResponse(w, r, http.StatusOK, h.TaskList.data)
