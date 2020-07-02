@@ -25,8 +25,8 @@ func GetHandlers() *Handler {
 	}
 }
 
-// Error is a custom HTTP error
-type Error struct {
+// Response struct
+type Response struct {
 	Method    string      `json:"method,omitempty"`
 	Status    int         `json:"status,omitempty"`
 	Timestamp time.Time   `json:"timestamp,omitempty"`
@@ -38,7 +38,7 @@ func (Handler) HTTPResponse(w http.ResponseWriter, r *http.Request, status int, 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 
-	json.NewEncoder(w).Encode(Error{
+	json.NewEncoder(w).Encode(Response{
 		Method:    r.Method,
 		Status:    status,
 		Timestamp: time.Now().UTC(),

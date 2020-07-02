@@ -5,7 +5,6 @@ import (
 )
 
 func main() {
-	// r := mux.NewRouter()
 	server := NewServer("3000")
 	r := server.router
 	h := GetHandlers()
